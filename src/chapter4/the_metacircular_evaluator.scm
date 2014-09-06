@@ -21,7 +21,11 @@
 				(else
 					(error "Unknown expression type -- EVAL" exp))))
 
-;;; Defining the apply construct
+;;; Defining the apply procedure
+
+;; It is essential that we save a reference to the original apply implementation before redefining it.
+(define apply-in-underlying-scheme apply) 
+
 (define (apply procedure arguments)
 	(cond ((primitive-procedure? procedure)
 					(apply-primitive-procedure procedure arguments))
@@ -288,8 +292,6 @@
 (define (apply-primitive-procedure proc args)
 	(apply-in-underlying-scheme
 		(primitive-implementation proc) args))
-
-(define apply-in-underlying-scheme apply)
 
 (define (setup-environment)
 	(let ((initial-env
